@@ -1,0 +1,18 @@
+﻿<label class="list-group-item">
+    <input class="form-check-input me-1" type="checkbox" value="@todo.IsEnded" @oninput="OnCheck">
+    @todo.Title
+    @if(todo.Limit != null)
+    {
+        <p style="color:gray;">@todo.Limit.ToString()</p>
+    }
+</label>
+
+@code {
+    [Parameter]
+    public Data.Todo todo { get; set; }
+    [Parameter]
+    public RenderFragment? ChildContent{ get; set; } 
+    [Parameter]
+    public EventCallback OnCheck { get; set; }
+
+}

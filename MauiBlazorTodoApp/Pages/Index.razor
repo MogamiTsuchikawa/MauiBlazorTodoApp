@@ -1,0 +1,23 @@
+﻿@page "/"
+@using Data;
+@foreach (Todo todo in todoService.TodoList.Where(t=>!t.IsEnded))
+{
+    <TodoItem @key="todo.Id" todo="@todo" OnCheck="@(() => {
+todo.IsEnded = true;
+todoService.Commit();
+StateHasChanged();
+})" />
+}
+<input type="text" @bind-value="inputText" />
+<button @onclick="Add">ADD</button>
+
+@code {
+    TodoService todoService = TodoService.Instance;
+    string inputText = "";
+    void Add()
+    {
+        todoService.TodoList.Add(new(inputText));
+        todoService.Commit();
+        inputText = "";
+    }
+}
