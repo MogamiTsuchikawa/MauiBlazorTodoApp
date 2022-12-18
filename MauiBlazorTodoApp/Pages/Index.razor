@@ -8,16 +8,16 @@ todoService.Commit();
 StateHasChanged();
 })" />
 }
-<input type="text" @bind-value="inputText" />
-<button @onclick="Add">ADD</button>
+
+
 
 @code {
     TodoService todoService = TodoService.Instance;
-    string inputText = "";
-    void Add()
+    protected override void OnInitialized()
     {
-        todoService.TodoList.Add(new(inputText));
-        todoService.Commit();
-        inputText = "";
+        todoService.TodoList.CollectionChanged += (sender, e) =>
+        {
+            StateHasChanged();
+        };
     }
 }

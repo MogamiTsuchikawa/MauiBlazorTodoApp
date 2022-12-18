@@ -1,0 +1,42 @@
+﻿@using MauiBlazorTodoApp.Data
+@if (IsOpen)
+{
+    <div class="modalArea">
+        <div class="modalBg"></div>
+        <div class="modalWrapper">
+            <div class="mb-2">
+                <label for="todoTitle" class="form-label">タイトル</label>
+                <input type="text" class="form-control" id="todoTitle" @bind-value="inputText">
+            </div>
+            <div class="mb-2">
+                <label for="limit" class="form-label">期限</label>
+                <input type="datetime-local" id="limit" step="300" class="form-control" @bind-value="limitDate">
+            </div>
+            <button @onclick="OnClose" class="btn btn-secondary">キャンセル</button>
+            <button @onclick="Add" class="btn btn-success">追加</button>
+        </div>
+    </div>
+}
+@code {
+    [Parameter]
+    public bool IsOpen { get; set; } = true;
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+    [Parameter]
+    public EventCallback OnAdd { get; set; }
+
+    public TodoService TodoService { get; set; } = TodoService.Instance;
+    string inputText = "";
+    DateTime? limitDate = null;
+    void Add()
+    {
+        if(limitDate is not null)
+            TodoService.TodoList.Add(new(inputText, (DateTime)limitDate));
+        else
+            TodoService.TodoList.Add(new(inputText));
+        TodoService.Commit();
+        inputText = "";
+        OnAdd.InvokeAsync();
+    }
+
+}
